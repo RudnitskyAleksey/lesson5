@@ -1,0 +1,38 @@
+services:
+  service_app :
+    image : prod-service:local
+    container_name : prod-service-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment: # environment variables to be used by the spring-module-1 container
+      - DATABASE_URL=jdbc:postgresql://service_db:5432/postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=Look_2011
+    ports:
+      - 8082:8080
+    depends_on:
+      - service_db
+    links:
+      - service_db
+    networks:
+      - ps
+
+  service_db:
+    image : postgres:latest
+    container_name : service_postgres
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=Look_2011'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PORT=5432'
+    ports:
+      - 15432:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ps
+
+networks:
+  ps:
