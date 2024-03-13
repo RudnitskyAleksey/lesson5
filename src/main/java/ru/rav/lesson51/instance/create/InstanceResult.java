@@ -9,7 +9,7 @@ public class InstanceResult {
     private String message;
     private InstanceData data;
 
-    public void InstanceResult() {
+    public InstanceResult() {
         data = new InstanceData();
     }
 }
